@@ -1,11 +1,12 @@
 
 const NODE_ENV = process.env.NODE_ENV || 'development',
     webpack = require('webpack');
+
 module.exports = {
-    context: __dirname + '/js',
+    //context: path.resolve(__dirname, "/js"),
     entry: {
-        home: './index.js',
-        game: './game.js'
+        home: './js/index.js',
+        game: './js/game.js'
     },
     output: {
         path: __dirname+'/static',
@@ -14,6 +15,7 @@ module.exports = {
     },
 
     watch: (NODE_ENV=='development') ? true : false,
+
     watchOptions:{
         aggregateTimeout: 100 //def:300
     },
@@ -21,6 +23,7 @@ module.exports = {
     devtool: NODE_ENV=='development' ? "cheap-inline-module-source-map" : null,
 
     plugins: [
+        //new webpack.OldWatchingPlugin(),
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
             NODE_ENV: JSON.stringify(NODE_ENV)
@@ -52,6 +55,11 @@ module.exports = {
                     presets: ['es2015'],
                     plugins: ['transform-runtime']
                 }
+            },
+            {
+                test: /(pixi|phaser).js/,
+                loader: 'script'// script-loader
+
             }
         ]
     }
