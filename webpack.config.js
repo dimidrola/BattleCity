@@ -60,6 +60,10 @@ module.exports = {
                 test: /(pixi|phaser).js/,
                 loader: 'script'// script-loader
 
+            },
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader?root=."
             }
         ]
     }
