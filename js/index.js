@@ -1,29 +1,28 @@
 'use strict'
+import 'phaser-shim';
 import  './css/main.css';
-import {
-	WINDOW_WIDTH,
-	WINDOW_HEIGHT,
-	LOADING_TEXT
-} from './constants/index'
+import Boot from './states/Boot';
+import Preload from './states/Preload';
+import Main from './states/Main';
 
-let Game = require('./Phaser/Game')
-let State = require('./Phaser/State')
 
-const game = new Game(WINDOW_WIDTH, WINDOW_HEIGHT);
-const BootGameState = new State();
 
-game.state.add('Boot', BootGameState, false);
 
-BootGameState.create = function() {
-	let LoadingText = game.add.text(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, LOADING_TEXT, {
-		font: '32px "Arial"',
-		fill: '#FFFFFF',
-		stroke: '#000000',
-		strokeThickness: 3,
-		align: 'center'
-	});
-	LoadingText.anchor.setTo(0.5, 0.5);
-	game.state.start('Preloader', false, false);
-};
 
-game.state.start('Boot');
+
+class Game extends Phaser.Game {
+
+	constructor() {
+
+		super(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio, Phaser.AUTO);
+
+		this.state.add('Boot', Boot, false);
+		this.state.add('Main', Main, false);
+		this.state.add('Preload', Preload, false);
+
+		this.state.start('Boot');
+	}
+
+}
+
+var game = new Game();

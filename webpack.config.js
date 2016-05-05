@@ -5,8 +5,8 @@ const NODE_ENV = process.env.NODE_ENV || 'development',
 module.exports = {
     //context: path.resolve(__dirname, "/js"),
     entry: {
-        home: './js/index.js',
-        game: './js/game.js'
+        home: './js/index.js'//,
+       // game: './js/game.js'
     },
     output: {
         path: __dirname+'/static',
@@ -63,7 +63,11 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: "style-loader!css-loader?root=."
+                loader: "style!css" },
+           // { test: /\.png$/, loader: "url-loader?limit=100000?root=." },
+            {
+                test: /\.(png | wav)$/,
+                loader: "file?name=[path][name].[ext]"
             }
         ]
     }
