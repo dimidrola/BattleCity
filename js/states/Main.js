@@ -1,50 +1,61 @@
 
 import Tank from './../objects/user/user';
-let tank,cursors,spaceKey,music,go,bullets,fireButton;
+import Sounds from './Sounds';
+let tank,cursors,spaceKey,sound,bullets,fireButton, music, layer;
 class Main extends Phaser.State {
 
 	create() {
-		//Enable Arcade Physics
-		this.game.physics.startSystem(Phaser.Physics.ARCADE);
+		this.map = this.game.add.tilemap('level1');
+		//this.map.addTilesetImage('map.png','map');
+		this.map.addTilesetImage('map');
+		layer = this.map.createLayer(0);
+
 		//Set the games background colour
 		this.game.stage.backgroundColor = '#000';
+		this.sound = new Sounds(this.game);
 		//Example of including an object
 		tank = new Tank(this.game);
 
+		this.map.setCollisionByExclusion([ 2, 4]);
+		layer.resizeWorld();
+		this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+
 		//events
 		cursors = this.game.input.keyboard.createCursorKeys();
-
-		this.initSound();
-
 	}
+
 	update() {
 
+		this.game.physics.arcade.collide(tank.sprite, layer);
+		tank.stop = true;
 		tank.sprite.body.velocity.x = 0;
 		tank.sprite.body.velocity.y = 0;
-		tank.sprite.body.angularVelocity = 0;
+		if (cursors.left.isDown)
+		{
+			tank.stop = false;
+			tank.move('left');
+		}
+		else if (cursors.right.isDown)
+		{
+			tank.stop = false;
+			tank.move('right');
+		}
+
+		if (cursors.up.isDown)
+		{
+			tank.stop = false;
+			tank.move('up');
+		}
+		else if (cursors.down.isDown)
+		{
+			tank.stop = false;
+			tank.move('down');
+		}
 
 
-		if (cursors.left.isDown) {
-			tank.sprite.body.angularVelocity = -200;
-		}
-		else if (cursors.right.isDown) {
-			tank.sprite.body.angularVelocity = 200;
-		}
+		tank._sound()
 
-		if (cursors.up.isDown) {
-			music.play();
-			go.stop();
-			tank.sprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(tank.sprite.angle-90, 300));
-		}
-		if (cursors.up.isUp) {
-			music.stop();
-			go.play()
-		}
-	}
-
-	initSound(){
-		go = this.game.add.audio('drive-stay', .2, true);
-		music = this.game.add.audio('drive-move', .2, true);
 	}
 
 }
